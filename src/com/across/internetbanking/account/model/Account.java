@@ -1,18 +1,16 @@
-package main.java.com.across.netbanking.account.model;
-
-import java.math.BigInteger;
+package com.across.internetbanking.account.model;
 
 public abstract class Account {
 
     /* Identity */
-    protected long accountID;
+    protected AccountId userID;
     protected String accountNumber;
     protected int customerID;
 
     /* State */
-    protected AccountStatus status;
+    //protected AccountStatus status;
     protected AccountType type;
-    protected Money balance;
+    //protected Money balance;
 
     protected Account(String accountNumber, AccountType type, int customerID){
         this.accountNumber = accountNumber;
@@ -35,4 +33,14 @@ public abstract class Account {
 
     }
     
+}  
+
+class AccountId {
+    String firstName;
+    long serial;
+
+    AccountId(String firstName, long serial) {
+        this.firstName = firstName;
+        this.serial = serial;
+    }
 }
