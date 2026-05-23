@@ -1,24 +1,21 @@
 package com.across.internetbanking.auth.service;
 
-import com.across.internetbanking.account.service.OpenBankAccount;
+import com.across.internetbanking.customer.model.*;
 
-public enum Signup {
-    LOGIN {
-        @Override
-        public void execute(){
-            System.out.println("lOGIN attempt");
-            Login loginAttempt = new Login();
-            loginAttempt.loginUser();
-        }
-    },
+public class Signup {
 
-    OPEN {
-        @Override
-        public void execute(){
-            System.out.println("Open Bank account attempt");
-            OpenBankAccount bankAccountCreationAttempt = new OpenBankAccount();
-            bankAccountCreationAttempt.createBankAccount();
-        }
-    };
-    public abstract void execute();
+    public void registerCustomer(AuthenticationService authService){
+        // Customer 
+        Customer customer =  new Customer();
+        customer.collectCustomerInfo();
+        
+        authService.customerData.update(customer); // Updata Databse of costumer.
+        customer.generateUser();
+
+        // User data update
+        authService.userData.update(customer.user.userID, customer.user.password);
+
+        // Bank Account
+        
+    }
 }
