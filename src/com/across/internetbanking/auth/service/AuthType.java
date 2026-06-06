@@ -1,20 +1,21 @@
 package com.across.internetbanking.auth.service;
 
 public enum AuthType {
+    
     LOGIN {
         @Override
-        void execute(AuthenticationService authService){
-            authService.login.loginUser();
+        public boolean execute(Signup SIGNUP, Login LOGIN){
+            return LOGIN.loginUser();
         }
     },
 
     OPEN {
         @Override
-        void execute(AuthenticationService authService){
-            authService.signup.registerCustomer(authService);
+        public boolean execute(Signup SIGNUP, Login LOGIN){
+            return SIGNUP.registerCustomer();
         }
     };
     
-    
-    abstract void execute(AuthenticationService authService);
+    public abstract boolean execute(Signup SIGNUP, Login LOGIN);
+
 }

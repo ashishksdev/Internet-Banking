@@ -1,4 +1,4 @@
-package com.across.internetbanking.util;
+package com.across.internetbanking.core.util;
 
 public record Serial() {
     private static int currentSerial = 700;
