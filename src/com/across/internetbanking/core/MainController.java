@@ -2,12 +2,14 @@ package com.across.internetbanking.core;
 
 import com.across.internetbanking.auth.controller.AuthController;
 import com.across.internetbanking.core.util.*;
-import com.across.internetbanking.customer.repository.CustomerData;
-import com.across.internetbanking.user.repository.UserData;
+import com.across.internetbanking.customer.repository.CustomerRepository;
+import com.across.internetbanking.customer.repository.impl.HashMapCustomeRepository;
+import com.across.internetbanking.user.repository.UserRepository;
+import com.across.internetbanking.user.repository.impl.HashMapUserRepository;
 
 public class MainController {
-    public static final CustomerData CUSTOMER_DATA = new CustomerData();
-    public static final UserData USER_DATA = new UserData();
+    public static final CustomerRepository CUSTOMER_DATA = new HashMapCustomeRepository();
+    public static final UserRepository USER_DATA = new HashMapUserRepository();
     private static final AuthController authController = new AuthController(CUSTOMER_DATA, USER_DATA);
     
     private static int attemptCount = 1;

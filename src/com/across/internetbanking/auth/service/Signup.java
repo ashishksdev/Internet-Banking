@@ -5,19 +5,19 @@ import com.across.internetbanking.auth.validator.SignupValidation;
 import com.across.internetbanking.core.util.Input;
 import com.across.internetbanking.customer.controller.*;
 import com.across.internetbanking.customer.model.*;
-import com.across.internetbanking.customer.repository.CustomerData;
+import com.across.internetbanking.customer.repository.CustomerRepository;
 import com.across.internetbanking.user.controller.UserFactory;
 import com.across.internetbanking.user.model.User;
-import com.across.internetbanking.user.repository.UserData;
+import com.across.internetbanking.user.repository.UserRepository;
 
 public class Signup {
 
-    public CustomerData CUSTOMER_DATA;
-    public UserData USER_DATA;
+    public CustomerRepository CUSTOMER_DATA;
+    public UserRepository USER_DATA;
 
     public Signup(){}
 
-    public Signup(CustomerData CUSTOMER_DATA, UserData USER_DATA){
+    public Signup(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA){
         this.CUSTOMER_DATA = CUSTOMER_DATA;
         this.USER_DATA = USER_DATA;
     }

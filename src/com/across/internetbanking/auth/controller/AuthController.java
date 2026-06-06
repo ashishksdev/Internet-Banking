@@ -5,18 +5,18 @@ import com.across.internetbanking.auth.service.AuthType;
 import com.across.internetbanking.auth.service.Login;
 import com.across.internetbanking.auth.service.Signup;
 import com.across.internetbanking.core.util.*;
-import com.across.internetbanking.customer.repository.CustomerData;
-import com.across.internetbanking.user.repository.UserData;
+import com.across.internetbanking.customer.repository.CustomerRepository;
+import com.across.internetbanking.user.repository.UserRepository;
 
 public class AuthController {
 
-    public CustomerData CUSTOMER_DATA;
-    public UserData USER_DATA;
+    public CustomerRepository CUSTOMER_DATA;
+    public UserRepository USER_DATA;
     public final Signup SIGNUP; 
     public final Login LOGIN;
 
 
-    public AuthController(CustomerData CUSTOMER_DATA, UserData USER_DATA){
+    public AuthController(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA){
         this.CUSTOMER_DATA = CUSTOMER_DATA;
         this.USER_DATA = USER_DATA;
         SIGNUP = new Signup(CUSTOMER_DATA, USER_DATA);
