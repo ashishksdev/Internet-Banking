@@ -8,9 +8,9 @@ import com.across.internetbanking.user.repository.UserRepository;
 import com.across.internetbanking.user.repository.impl.HashMapUserRepository;
 
 public class MainController {
-    public static final CustomerRepository CUSTOMER_DATA = new HashMapCustomeRepository();
-    public static final UserRepository USER_DATA = new HashMapUserRepository();
-    private static final AuthController authController = new AuthController(CUSTOMER_DATA, USER_DATA);
+    private final CustomerRepository CUSTOMER_DATA = new HashMapCustomeRepository();
+    private final UserRepository USER_DATA = new HashMapUserRepository();
+    private final AuthController authController = new AuthController(CUSTOMER_DATA, USER_DATA);
     
     private static int attemptCount = 1;
 
