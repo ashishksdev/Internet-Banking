@@ -1,6 +1,6 @@
 package com.across.internetbanking.auth.service;
 
-public enum AuthType {
+public enum AuthAction {
     
     LOGIN {
         @Override
@@ -12,10 +12,9 @@ public enum AuthType {
     OPEN {
         @Override
         public boolean execute(Signup SIGNUP, Login LOGIN){
-            return SIGNUP.registerCustomer();
+            return SIGNUP.onboardClient();
         }
     };
     
     public abstract boolean execute(Signup SIGNUP, Login LOGIN);
-
 }

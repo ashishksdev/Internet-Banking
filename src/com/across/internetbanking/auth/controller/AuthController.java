@@ -1,7 +1,7 @@
 package com.across.internetbanking.auth.controller;
 
 import com.across.internetbanking.auth.exception.UIDAlreadyExistsException;
-import com.across.internetbanking.auth.service.AuthType;
+import com.across.internetbanking.auth.service.AuthAction;
 import com.across.internetbanking.auth.service.Login;
 import com.across.internetbanking.auth.service.Signup;
 import com.across.internetbanking.core.util.*;
@@ -30,7 +30,7 @@ public class AuthController {
             // User input for signup(login/open) action.
             System.out.print(AppConstants.AUTH_TYPE_OPTION);
             String actionInput = Input.sc.next().trim().toUpperCase(); // User Signup request string.
-            AuthType request = AuthType.valueOf(actionInput); // Convert UserSignupRequest to Enum from string, for request verification.
+            AuthAction request = AuthAction.valueOf(actionInput); // Convert UserSignupRequest to Enum from string, for request verification.
             
             // Execute request
             authSuccess = request.execute(SIGNUP,LOGIN);
