@@ -9,6 +9,7 @@ import com.across.internetbanking.user.controller.UserController;
 import com.across.internetbanking.user.factory.UserFactory;
 import com.across.internetbanking.user.model.User;
 import com.across.internetbanking.user.repository.UserRepository;
+import com.across.internetbanking.user.service.UserID;
 
 public class Signup {
 
@@ -47,8 +48,9 @@ public class Signup {
 
     private User orchestrateUserCreation(Customer customer){
         UserController userController = new UserController();
+        UserID userID = new UserID();
 
-        String newUserID = userController.generateUserID(customer.firstName()); // Genrate User ID
+        String newUserID = userID.generate(customer.firstName()); // Genrate User ID
         userController.displayAssignedUserID(newUserID); // Diplay assigned User ID
         String validPassword = userController.promptForValidPassword(); // Validate Password
 
@@ -58,5 +60,4 @@ public class Signup {
 
         return user;
     }
-
 }

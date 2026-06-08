@@ -15,7 +15,6 @@ public class AuthController {
     public final Signup SIGNUP; 
     public final Login LOGIN;
 
-
     public AuthController(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA){
         this.CUSTOMER_DATA = CUSTOMER_DATA;
         this.USER_DATA = USER_DATA;
