@@ -17,7 +17,7 @@ public class UserController {
             String tempPassword = Input.sc.next().trim();
            
             if(!validator.validate(tempPassword)){
-                System.err.println("Password must be at least 4 chars and contain an uppercase, lowercase, digit, and symbol. Retry!");
+                System.err.println("Password must be at least 4 characters and contain an uppercase, lowercase, digit, and symbol. Retry!");
                 continue;
             }
 

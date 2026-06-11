@@ -1,25 +1,25 @@
 package com.across.internetbanking.auth.controller;
 
 import com.across.internetbanking.auth.dto.LoginDTO;
-import com.across.internetbanking.auth.exception.LoginFailedException;
 import com.across.internetbanking.auth.validator.LoginValidation;
+import com.across.internetbanking.core.exception.SessionLimitReachedException;
 import com.across.internetbanking.core.util.AppConstants;
 import com.across.internetbanking.user.model.User;
 import com.across.internetbanking.user.repository.UserRepository;
 
 public class Login {
     UserRepository USER_DATA;
-    LoginController loginController;
+    LoginForm loginForm;
     LoginValidation loginValidation;
 
     public Login(UserRepository USER_DATA){
         this.USER_DATA = USER_DATA;
-        this.loginController = new LoginController();
+        this.loginForm = new LoginForm();
         this.loginValidation = new LoginValidation(USER_DATA);
     }
-    public Login(UserRepository USER_DATA, LoginController loginController, LoginValidation loginValidation){
+    public Login(UserRepository USER_DATA, LoginForm loginController, LoginValidation loginValidation){
         this.USER_DATA = USER_DATA;
-        this.loginController = loginController;
+        this.loginForm = loginController;
         this.loginValidation = loginValidation;
     }
 
@@ -31,18 +31,20 @@ public class Login {
         boolean validCredentials;
 
         while (true) {
-
+            
+            // Implement session limit
             if(attempt > AppConstants.MAX_LOGIN_FAILURE){
-                throw new LoginFailedException("Login failed! Maximum limit reached.");
+                throw new SessionLimitReachedException("Login failed! Maximum limit reached.");
             }
-            loginDTO = loginController.promptForLoginInfo(); // Input login credentials
+
+            loginDTO = loginForm.loginCredentials(); // Input login credentials
 
             userExists = loginValidation.validateUser(loginDTO);  // Validate User ID
             
             if(userExists){
                 validCredentials = loginValidation.validateCredentials(loginDTO); // validate login credentials
             } else {
-                loginController.displayInvalidLoginCredentialsMessage();
+                displayInvalidLoginCredentialsMessage();
                 attempt++;
                 continue;
             }
@@ -51,9 +53,15 @@ public class Login {
                 return USER_DATA.getUser(loginDTO.userIDInput()); // Return valid User
             }
 
-            loginController.displayInvalidLoginCredentialsMessage();
+            displayInvalidLoginCredentialsMessage();
             attempt++;
+            
         }
+
+    }
+
+    public void displayInvalidLoginCredentialsMessage(){
+        System.out.println("Invalid User ID or password. Try again!");
     }
     
 }
