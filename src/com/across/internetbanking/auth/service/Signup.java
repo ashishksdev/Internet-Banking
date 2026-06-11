@@ -23,14 +23,16 @@ public class Signup {
         this.USER_DATA = USER_DATA;
     }
 
-    public boolean onboardClient(){
+    public User onboardClient(){
         Customer customer = orchestrateCustomerCreation(); // Create customer
         User user = orchestrateUserCreation(customer); // Create User
 
         // Bank Account will be created
         // All three, Customer, User and Bank Account will be linked together.
         // After Suuccessfull creation of Customer, User, BAnk account and linkage between them established, everything will be passed to concerned data repository.
-        return true;
+        CUSTOMER_DATA.update(customer);
+        USER_DATA.update(user);
+        return user;
     }
 
     private Customer orchestrateCustomerCreation(){

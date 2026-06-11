@@ -1,17 +1,10 @@
 package com.across.internetbanking.user.repository;
 
-// import java.util.HashMap;
-
-// public class UserRepository {
-//     HashMap<String,String> userDataTable = new HashMap<>();
-
-//     public void update(String userID, String password){
-//         userDataTable.put(userID,password);
-//     }
-
-// }
+import com.across.internetbanking.user.model.User;
 
 public interface UserRepository {
-    void update(String userID, String password);
-    boolean exists(String useId);
+    void update(User user);
+    boolean exists(String userID);
+    boolean validate(String userID, String password);
+    User getUser(String userID);
 }
