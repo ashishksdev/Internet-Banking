@@ -1,16 +1,24 @@
 package com.across.internetbanking.user.model;
 
+import com.across.internetbanking.auth.service.security.PasswordHash;
+
 public class User {
     public final String userID;
     private String password;
+    private String salt;
+    PasswordHash passwordHash;
 
-    public User(String userID, String password){
+    
+    public User(String userID, String password, String salt, PasswordHash passwordHash){
         this.userID = userID;
         this.password = password;
+        this.salt = salt;
+        this.passwordHash = passwordHash;
     }
 
     public boolean passwordMatch(String passwordInp){
-        return passwordInp.equals(password);
+        String hashOfInputPassword = passwordHash.hashPassword(passwordInp, salt);
+        return hashOfInputPassword.equals(password);
     }
 
 }

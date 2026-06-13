@@ -3,6 +3,7 @@ package com.across.internetbanking.auth.controller;
 import com.across.internetbanking.auth.exception.LoginFailedException;
 import com.across.internetbanking.auth.exception.UIDAlreadyExistsException;
 import com.across.internetbanking.auth.service.AuthAction;
+import com.across.internetbanking.auth.service.security.PasswordHash;
 import com.across.internetbanking.core.exception.SessionLimitReachedException;
 import com.across.internetbanking.core.util.*;
 import com.across.internetbanking.customer.repository.CustomerRepository;
@@ -10,16 +11,12 @@ import com.across.internetbanking.user.repository.UserRepository;
 
 public class AuthController {
 
-    private final CustomerRepository CUSTOMER_DATA;
-    private final UserRepository USER_DATA;
     private final Signup SIGNUP; 
     private final Login LOGIN;
     private int failedCount = 1;
 
-    public AuthController(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA){
-        this.CUSTOMER_DATA = CUSTOMER_DATA;
-        this.USER_DATA = USER_DATA;
-        SIGNUP = new Signup(CUSTOMER_DATA, USER_DATA);
+    public AuthController(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA, PasswordHash passwordHash){
+        SIGNUP = new Signup(CUSTOMER_DATA, USER_DATA, passwordHash);
         LOGIN = new Login(USER_DATA);
     }
 

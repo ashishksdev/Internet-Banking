@@ -3,6 +3,7 @@ package com.across.internetbanking.auth.controller;
 import com.across.internetbanking.account.model.Account;
 import com.across.internetbanking.auth.exception.UIDAlreadyExistsException;
 import com.across.internetbanking.auth.service.SignupService;
+import com.across.internetbanking.auth.service.security.PasswordHash;
 import com.across.internetbanking.auth.validator.SignupValidation;
 import com.across.internetbanking.customer.controller.CustomerForm;
 import com.across.internetbanking.customer.dto.CustomerPersonalInfoDTO;
@@ -19,10 +20,12 @@ public class Signup {
 
     private final CustomerRepository CUSTOMER_DATA;
     private final UserRepository USER_DATA;
+    private final PasswordHash passwordHash;
 
-    public Signup(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA){
+    public Signup(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA, PasswordHash passwordHash){
         this.CUSTOMER_DATA = CUSTOMER_DATA;
         this.USER_DATA = USER_DATA;
+        this.passwordHash = passwordHash;
     }
 
     public User onboardClient(){
@@ -79,10 +82,12 @@ public class Signup {
             System.err.println("Password must be at least 4 characters and contain an uppercase, lowercase, digit, and symbol. Retry!"); // Password denied in validation message.
         }
         final String validPassword = tempPassword;
+        String salt = passwordHash.generateSalt();
+        String hashedPassword = passwordHash.hashPassword(validPassword, salt);
 
         // Create a new User as per User ID and Password.
         UserFactory factory = new UserFactory();
-        User user = factory.create(newUserID,validPassword);
+        User user = factory.create(newUserID,hashedPassword,salt, passwordHash);
 
         return user;
     }

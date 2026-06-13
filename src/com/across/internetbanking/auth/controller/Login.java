@@ -8,9 +8,9 @@ import com.across.internetbanking.user.model.User;
 import com.across.internetbanking.user.repository.UserRepository;
 
 public class Login {
-    private UserRepository USER_DATA;
-    private LoginForm loginForm;
-    private LoginValidation loginValidation;
+    private final UserRepository USER_DATA;
+    private final LoginForm loginForm;
+    private final LoginValidation loginValidation;
 
     public Login(UserRepository USER_DATA){
         this.USER_DATA = USER_DATA;
