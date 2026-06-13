@@ -1,10 +1,11 @@
 package com.across.internetbanking.customer.dto;
 
+import com.across.internetbanking.customer.model.Gender;
+
 public record CustomerPersonalInfoDTO(
     String uniqueID,
-    String firstName,
-    String lastName,
-    char gender,
+    String name,
+    Gender gender,
     int age,
-    long mobileNo)
+    String mobileNo)
 {}

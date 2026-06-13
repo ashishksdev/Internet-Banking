@@ -8,8 +8,8 @@ import com.across.internetbanking.user.repository.UserRepository;
 
 public class SignupService {
 
-    CustomerRepository CUSTOMER_DATA;
-    UserRepository USER_DATA;
+    private CustomerRepository CUSTOMER_DATA;
+    private UserRepository USER_DATA;
 
     public SignupService(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA) {
         this.CUSTOMER_DATA = CUSTOMER_DATA;

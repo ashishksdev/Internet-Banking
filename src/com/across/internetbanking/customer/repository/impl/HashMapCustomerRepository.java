@@ -4,7 +4,7 @@ import com.across.internetbanking.customer.model.Customer;
 import com.across.internetbanking.customer.repository.CustomerRepository;
 import java.util.HashMap;
 
-public class HashMapCustomeRepository implements CustomerRepository {
+public class HashMapCustomerRepository implements CustomerRepository {
     private final HashMap<String, Customer> customerDataTable = new HashMap<>();
 
     @Override

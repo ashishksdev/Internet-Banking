@@ -17,10 +17,8 @@ import com.across.internetbanking.user.validator.IsCompatiblePassword;
 
 public class Signup {
 
-    public CustomerRepository CUSTOMER_DATA;
-    public UserRepository USER_DATA;
-
-    public Signup(){}
+    private final CustomerRepository CUSTOMER_DATA;
+    private final UserRepository USER_DATA;
 
     public Signup(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA){
         this.CUSTOMER_DATA = CUSTOMER_DATA;
@@ -54,7 +52,7 @@ public class Signup {
 
         // When Unique ID is validated and found new, collect personal info of customer.
         CustomerPersonalInfoDTO personalInfo = customerForm.personalInfo(uniqueIDInput);
-
+    
         // Create a new customer as per his/her personal details.
         CustomerFactory factory = new CustomerFactory();
         Customer customer = factory.create(personalInfo); // New Customer.
@@ -63,34 +61,24 @@ public class Signup {
     }
 
     private User userCreation(Customer customer){
-        UserID userID = new UserID();
-        String tempPassword, confirmPassword;
+        UserID userID = new UserID(USER_DATA);
+        String tempPassword;
 
-        String newUserID = userID.generate(customer.firstName());
+        String newUserID = userID.generateUnique(customer.name());
         displayAssignedUserID(newUserID);
 
         PasswordForm passwordForm = new PasswordForm();
         IsCompatiblePassword validator = new IsCompatiblePassword();
 
         while (true) { 
+            tempPassword  = passwordForm.promptForPassword(); // Password input
 
-            tempPassword  = passwordForm.inputCreatePassword(); // Password input
-
-            if(!validator.validate(tempPassword)){
-                System.err.println("Password must be at least 4 characters and contain an uppercase, lowercase, digit, and symbol. Retry!");
-                continue;
+            if(validator.validate(tempPassword)){
+                break; // Password validated true.
             }
-
-            confirmPassword = passwordForm.inputConfirmPassword(); // Confirm password input
-
-            if(!tempPassword.equals(confirmPassword)){
-                System.err.println("Password mismatch! Retry!");
-                continue;
-            }
-            break;
+            System.err.println("Password must be at least 4 characters and contain an uppercase, lowercase, digit, and symbol. Retry!"); // Password denied in validation message.
         }
-
-        final String validPassword = confirmPassword;
+        final String validPassword = tempPassword;
 
         // Create a new User as per User ID and Password.
         UserFactory factory = new UserFactory();

@@ -7,8 +7,7 @@ public class CustomerFactory {
     public Customer create(CustomerPersonalInfoDTO personalInfo){
         Customer newCustomer = new Customer(
             personalInfo.uniqueID(),
-            personalInfo.firstName(),
-            personalInfo.lastName(),
+            personalInfo.name(),
             personalInfo.gender(),
             personalInfo.age(),
             personalInfo.mobileNo()

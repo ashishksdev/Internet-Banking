@@ -52,14 +52,16 @@ public class AuthController {
 
         // Auth action request execute.
         switch(request){
-            case OPEN -> {
-                SIGNUP.onboardClient();
-                System.out.println("\n>>> Signup successful! Please login to your account.\n");
-            }
+
             case LOGIN -> {
                 LOGIN.loginUser();
                 // Give access to account
                 System.out.println("Hello [Name]!");
+            }
+            
+            case SIGNUP -> {
+                SIGNUP.onboardClient();
+                System.out.println("\n>>> Signup successful! Please login to your account.\n");
             }
             default -> throw new IllegalArgumentException();
         }
