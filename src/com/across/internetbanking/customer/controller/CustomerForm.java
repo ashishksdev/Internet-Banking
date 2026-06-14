@@ -61,9 +61,8 @@ public class CustomerForm {
             System.out.print("Mobile: ");
             mobileNo = Input.sc.next();
             Input.sc.nextLine();
-            int mobileLength = String.valueOf(mobileNo).trim().length();
 
-            if(mobileLength == 10 ){
+            if(mobileNo.matches("\\d{10}")){
                 break;
             } else{
                 System.out.println("Invalid mobile number!");

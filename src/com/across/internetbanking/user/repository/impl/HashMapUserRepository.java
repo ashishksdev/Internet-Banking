@@ -19,7 +19,12 @@ public class HashMapUserRepository implements UserRepository {
 
     @Override
     public boolean validate(String userID, String password){
-        return ((userDataTable.get(userID)).passwordMatch(password));
+        User user = userDataTable.get(userID);
+        if(user == null){
+            return false;
+        }
+
+        return user.passwordMatch(password);
     }
 
     @Override
