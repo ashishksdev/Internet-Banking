@@ -1,5 +1,6 @@
 package com.across.internetbanking.auth.controller;
 
+import com.across.internetbanking.account.repository.AccountRepository;
 import com.across.internetbanking.auth.exception.LoginFailedException;
 import com.across.internetbanking.auth.exception.UIDAlreadyExistsException;
 import com.across.internetbanking.auth.service.AuthAction;
@@ -7,16 +8,27 @@ import com.across.internetbanking.auth.service.security.PasswordHash;
 import com.across.internetbanking.core.exception.SessionLimitReachedException;
 import com.across.internetbanking.core.util.*;
 import com.across.internetbanking.customer.repository.CustomerRepository;
+import com.across.internetbanking.dashboard.controller.Dashboard;
+import com.across.internetbanking.dashboard.exception.AccountNotActiveException;
+import com.across.internetbanking.user.model.User;
 import com.across.internetbanking.user.repository.UserRepository;
 
 public class AuthController {
 
-    private final Signup SIGNUP; 
+    private final Signup SIGNUP;
+    private final CustomerRepository CUSTOMER_DATA;
+    private final UserRepository USER_DATA;
+    private final AccountRepository ACCOUNT_DATA;
+    
     private final Login LOGIN;
     private int failedCount = 1;
 
-    public AuthController(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA, PasswordHash passwordHash){
-        SIGNUP = new Signup(CUSTOMER_DATA, USER_DATA, passwordHash);
+    public AuthController(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA, AccountRepository ACCOUNT_DATA, PasswordHash passwordHash){
+        this.CUSTOMER_DATA = CUSTOMER_DATA;
+        this.USER_DATA = USER_DATA;
+        this.ACCOUNT_DATA = ACCOUNT_DATA;
+
+        SIGNUP = new Signup(CUSTOMER_DATA, USER_DATA, ACCOUNT_DATA, passwordHash);
         LOGIN = new Login(USER_DATA);
     }
 
@@ -39,8 +51,10 @@ public class AuthController {
             attemptLeftMessage(failedCount);
             failedCount++;
         } catch (LoginFailedException lfe){
-            System.out.println(lfe.getMessage());
+            System.err.println(lfe.getMessage());
             failedCount++;
+        } catch (AccountNotActiveException anae){
+            System.err.println(anae.getMessage());
         }
 
     }
@@ -51,14 +65,17 @@ public class AuthController {
         switch(request){
 
             case LOGIN -> {
-                LOGIN.loginUser();
-                // Give access to account
-                System.out.println("Hello [Name]!");
+                User user = LOGIN.loginUser();
+
+                // Give access to dashboard.
+                Dashboard dashboard = new Dashboard(user, ACCOUNT_DATA, CUSTOMER_DATA);
+                dashboard.start();
+                
             }
             
             case SIGNUP -> {
                 SIGNUP.onboardClient();
-                System.out.println("\n>>> Signup successful! Please login to your account.\n");
+                System.out.println("\n>> Signup successful! Please login to your account.\n");
             }
             default -> throw new IllegalArgumentException();
         }

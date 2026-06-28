@@ -1,5 +1,7 @@
 package com.across.internetbanking.core;
 
+import com.across.internetbanking.account.repository.AccountRepository;
+import com.across.internetbanking.account.repository.impl.HashMapAccountRepository;
 import com.across.internetbanking.auth.controller.AuthController;
 import com.across.internetbanking.auth.service.security.PasswordHash;
 import com.across.internetbanking.auth.service.security.impl.SimpleHasher;
@@ -13,8 +15,9 @@ import com.across.internetbanking.user.repository.impl.HashMapUserRepository;
 public class MainController {
     private final CustomerRepository CUSTOMER_DATA = new HashMapCustomerRepository();
     private final UserRepository USER_DATA = new HashMapUserRepository();
+    private final AccountRepository ACCOUNT_DATA = new HashMapAccountRepository();
     private final PasswordHash passwordHash = new SimpleHasher();
-    private final AuthController authController = new AuthController(CUSTOMER_DATA, USER_DATA, passwordHash);
+    private final AuthController authController = new AuthController(CUSTOMER_DATA, USER_DATA, ACCOUNT_DATA, passwordHash);
     
     private int authCycleCount = 1;
 

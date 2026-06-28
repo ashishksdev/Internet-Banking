@@ -1,6 +1,12 @@
 package com.across.internetbanking.auth.controller;
 
+import com.across.internetbanking.account.controller.AccountForm;
+import com.across.internetbanking.account.factory.AccountFactory;
 import com.across.internetbanking.account.model.Account;
+import com.across.internetbanking.account.model.AccountStatus;
+import com.across.internetbanking.account.model.AccountType;
+import com.across.internetbanking.account.repository.AccountRepository;
+import com.across.internetbanking.account.service.AccountNumber;
 import com.across.internetbanking.auth.exception.UIDAlreadyExistsException;
 import com.across.internetbanking.auth.service.SignupService;
 import com.across.internetbanking.auth.service.security.PasswordHash;
@@ -20,27 +26,30 @@ public class Signup {
 
     private final CustomerRepository CUSTOMER_DATA;
     private final UserRepository USER_DATA;
+    private final AccountRepository ACCOUNT_DATA;
     private final PasswordHash passwordHash;
 
-    public Signup(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA, PasswordHash passwordHash){
+    public Signup(CustomerRepository CUSTOMER_DATA, UserRepository USER_DATA, AccountRepository ACCOUNT_DATA, PasswordHash passwordHash){
         this.CUSTOMER_DATA = CUSTOMER_DATA;
         this.USER_DATA = USER_DATA;
+        this.ACCOUNT_DATA = ACCOUNT_DATA;
         this.passwordHash = passwordHash;
     }
 
-    public User onboardClient(){
+    public void onboardClient(){
         Customer customer = customerCreation(); // Create customer
         User user = userCreation(customer); // Create User
+        Account account = accountCreation();
         // Account bankAccount = orchestrateAccountCreation(); // Create Account
 
-        SignupService signupService = new SignupService(CUSTOMER_DATA, USER_DATA);
+        SignupService signupService = new SignupService(CUSTOMER_DATA, USER_DATA, ACCOUNT_DATA);
 
         // Link Bank account---User---Customer, in SignupService
+        signupService.link(customer, user, account);
 
-        // After successfull linkage, add to database.
-        signupService.addClient(customer,user);
-       
-        return user;
+        // After successfull linkage, update to database.
+        signupService.addClient(customer, user, account);
+        account.updateAcStatus(AccountStatus.ACTIVE);// Update Account status to ACTIVE
     }
 
     private Customer customerCreation(){
@@ -81,13 +90,15 @@ public class Signup {
             }
             System.err.println("Password must be at least 4 characters and contain an uppercase, lowercase, digit, and symbol. Retry!"); // Password denied in validation message.
         }
+
+        // Pass validPassword for salting and hashing.
         final String validPassword = tempPassword;
         String salt = passwordHash.generateSalt();
         String hashedPassword = passwordHash.hashPassword(validPassword, salt);
 
         // Create a new User as per User ID and Password.
         UserFactory factory = new UserFactory();
-        User user = factory.create(newUserID,hashedPassword,salt, passwordHash);
+        User user = factory.create(newUserID, hashedPassword, salt, passwordHash);
 
         return user;
     }
@@ -96,7 +107,27 @@ public class Signup {
         System.out.printf("Your User ID: %s%n", userID);
     }
 
-    private Account orchestrateAccountCreation(){
-        return new Account();
+    private Account accountCreation(){
+        AccountForm acForm = new AccountForm();
+        // Input account type
+        AccountType accountType = null;
+        boolean validAccountType;
+        do { 
+            try {
+                accountType = acForm.promptForAccountDetail();
+                validAccountType = true;
+            } catch (IllegalArgumentException e) {
+                System.err.println("Inavlid Account type. Try again!");
+                validAccountType = false;
+            }
+        } while (!validAccountType);
+        
+        AccountNumber accountNumber = new AccountNumber(ACCOUNT_DATA);
+
+        String newAccountNumber = accountNumber.generate(); // generate unique account number.
+        AccountFactory factory = new AccountFactory(accountType);
+        Account account = factory.create(newAccountNumber);
+        
+        return account;
     }
 }

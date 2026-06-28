@@ -9,11 +9,16 @@ public class HashMapCustomerRepository implements CustomerRepository {
 
     @Override
     public void update(Customer customer){
-        customerDataTable.put(customer.uniqueID(), customer);
+        customerDataTable.put(customer.customerID(), customer);
     }
 
     @Override
     public boolean exists(String uniqueID){
         return customerDataTable.containsKey(uniqueID);
+    }
+
+    @Override
+    public Customer getCustomer(String customerID){
+        return customerDataTable.get(customerID);
     }
 }

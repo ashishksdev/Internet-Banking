@@ -3,6 +3,8 @@ package com.across.internetbanking.user.model;
 import com.across.internetbanking.auth.service.security.PasswordHash;
 
 public class User {
+    private String accountNumber;
+    private String customerID;
     public final String userID;
     private String password;
     private String salt;
@@ -19,6 +21,18 @@ public class User {
     public boolean passwordMatch(String passwordInp){
         String hashOfInputPassword = passwordHash.hashPassword(passwordInp, salt);
         return hashOfInputPassword.equals(password);
+    }
+
+    public void linkAC(String accountNumber){
+        this.accountNumber = accountNumber;
+    }
+
+    public void linkCustomer(String customerID){
+        this.customerID = customerID;
+    }
+
+    public String accountNumber(){
+        return accountNumber;
     }
 
 }
